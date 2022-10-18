@@ -1,7 +1,7 @@
 const Note = require('../models/Note.js')
 const { nanoid } = require('nanoid')
 
-const getNotes = async (request, response) => {
+const getAllNotesHandler = async (request, response) => {
     try {
 
         const notes = await Note.findAll()
@@ -107,4 +107,9 @@ const deleteNoteByIdHandler = async (request, response) => {
     })
 }
 
-module.exports = { getAllNotesHandler: getNotes, addNoteHandler, editNoteByIdHandler, deleteNoteByIdHandler }
+module.exports = { 
+    getAllNotesHandler, 
+    addNoteHandler, 
+    editNoteByIdHandler, 
+    deleteNoteByIdHandler 
+}
