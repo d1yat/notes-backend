@@ -13,6 +13,29 @@ const getAllNotesHandler = async (request, response) => {
 
 const addNoteHandler = async (request, response) => {
     const { title, tags, body } = request.body
+    let error = 0
+    let errMsg = []
+
+    if (title === '') {
+        error += 1
+        errMsg.push('Title tidak boleh kosong')
+    }
+    if (tags === '') {
+        error += 1
+        errMsg.push('Tags tidak boleh kosong')
+    }
+    if (body === '') {
+        error += 1
+        errMsg.push('Body tidak boleh kosong')
+    }
+    if (error > 0) {
+        response.status(500)
+        return response.json({
+            status: 'fail',
+            message: 'Catatan gagal ditambahkan',
+            data: errMsg
+        })
+    }
 
     const note_id = nanoid(16)
     const createdAt = new Date().toISOString()
@@ -25,24 +48,25 @@ const addNoteHandler = async (request, response) => {
     try {
 
         const result = await Note.create(newNote)
-        const isSuccess = result.dataValues?.note_id.length > 0 
+        console.log(result);
+        // const isSuccess = result.dataValues?.note_id.length > 0 
 
-        if (isSuccess) {
-            response.status(201)
-            return response.json({
-                status: 'success',
-                message: 'Catatan berhasil ditambahkan',
-                data: {
-                    noteId: note_id
-                }
-            })
-        }
+        // if (isSuccess) {
+        //     response.status(201)
+        //     return response.json({
+        //         status: 'success',
+        //         message: 'Catatan berhasil ditambahkan',
+        //         data: {
+        //             noteId: note_id
+        //         }
+        //     })
+        // }
 
-        response.status(500)
-        response.json({
-            status: 'fail',
-            message: 'Catatan gagal ditambahkan'
-        })
+        // response.status(500)
+        // response.json({
+        //     status: 'fail',
+        //     message: 'Catatan gagal ditambahkan'
+        // })
     } catch(error) {
         console.log(error)
     }
